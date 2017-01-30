@@ -12,17 +12,28 @@ public class GraphData {
         LINE,BAR
     }
 
-    private float minX, maxX, y;
+    private int minX, maxX, y;
     private Type type;
 
-    public GraphData(float x, float y) {
+    /**
+     *
+     * @param x minutes
+     * @param y temp
+     */
+    public GraphData(int x, int y) {
         super();
         this.minX = x;
         this.y = y;
         type = Type.LINE;
     }
 
-    public GraphData(float minX, float maxX, float y) {
+    /**
+     *
+     * @param minX start minute
+     * @param maxX stop minute
+     * @param y temp
+     */
+    public GraphData(int minX, int maxX, int y) {
         super();
         this.minX = minX;
         this.y = y;
@@ -30,21 +41,19 @@ public class GraphData {
         type = Type.BAR;
     }
 
-    public float getX() {
-        float val = (float) minX/60;
-        return val;
+    public int getX() {
+        return minX;
     }
 
-    public float getMinX(){
+    public int getMinX(){
         return getX();
     }
 
-    public float getMaxX() {
-        float val = (float) maxX/60;
-        return val;
+    public int getMaxX() {
+        return maxX;
     }
 
-    public float getY() {
+    public int getY() {
         return this.y;
     }
 

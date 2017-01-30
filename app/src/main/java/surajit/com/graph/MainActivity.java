@@ -32,8 +32,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         graphView.addRoomTemperature(55,0);
         graphView.addRoomTemperature(85,240);
         graphView.addRoomTemperature(70,600);
-        //graphView.addRoomTemperature(75,12);
-        //graphView.addRoomTemperature(65,16);
+        graphView.addRoomTemperature(75,12*60);
+        graphView.addRoomTemperature(65,16*60);
     }
 
     @Override

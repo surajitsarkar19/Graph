@@ -110,7 +110,7 @@ public class ThermostatGraphView extends View {
     }
 
     public void drawLineGraph(Canvas canvas){
-        /*if(linePoints.size()>0){
+        if(linePoints.size()>0){
             GraphData data = null;
             for(GraphData graphData : linePoints){
                 if(data == null){
@@ -120,27 +120,19 @@ public class ThermostatGraphView extends View {
                 canvas.drawLine(getX(data.getX()),getY(data.getY()),getX(graphData.getX()),getY(graphData.getY()),linePaint);
                 data = graphData;
             }
-        }*/
+        }
 
-        GraphData data = new GraphData(170,60);
+        /*GraphData data = new GraphData(120,60);
         int x = getX(data.getX());
         int y = getY(data.getY());
-        canvas.drawCircle(x,y,5,paint);
-    }
-
-    private int getX(float val){
-        return getX((int)Math.round(val));
-    }
-
-    private int getY(float val){
-        return getY((int)Math.abs(val));
+        canvas.drawCircle(x,y,5,paint);*/
     }
 
     private int getX(int val){
         int x = 0;
         double val1 = 0;
-        if(val < 24){
-            val1 = (double)graphWidth/24;
+        if(val < 24*60){
+            val1 = (double)graphWidth/(24*60);
             val1*=val;
         } else{
             val1 = graphWidth;
@@ -168,11 +160,13 @@ public class ThermostatGraphView extends View {
     }
 
     public void drawBarGraph(Canvas canvas){
-        if(barPoints.size()>0){
+        /*if(barPoints.size()>0){
             for(GraphData graphData : linePoints){
 
             }
-        }
+        }*/
+
+        GraphData data = new GraphData(120,240,60);
     }
 
     private void drawAxis(Canvas canvas){
