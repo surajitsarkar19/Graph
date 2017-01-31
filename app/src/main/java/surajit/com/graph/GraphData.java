@@ -8,12 +8,12 @@ package surajit.com.graph;
 
 public class GraphData {
 
-    enum Type{
-        LINE,BAR
+    enum SetPoint{
+        HEAT,COOL
     }
 
     private int minX, maxX, y;
-    private Type type;
+    private SetPoint type;
 
     /**
      *
@@ -24,7 +24,6 @@ public class GraphData {
         super();
         this.minX = x;
         this.y = y;
-        type = Type.LINE;
     }
 
     /**
@@ -33,12 +32,12 @@ public class GraphData {
      * @param maxX stop minute
      * @param y temp
      */
-    public GraphData(int minX, int maxX, int y) {
+    public GraphData(int minX, int maxX, int y, SetPoint type ) {
         super();
         this.minX = minX;
         this.y = y;
         this.maxX = maxX;
-        type = Type.BAR;
+        this.type = type;
     }
 
     public int getX() {
@@ -57,7 +56,7 @@ public class GraphData {
         return this.y;
     }
 
-    public Type getType(){
+    public SetPoint getType(){
         return type;
     }
 

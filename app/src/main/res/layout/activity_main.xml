@@ -10,11 +10,19 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="surajit.com.graph.MainActivity">
 
-    <surajit.com.graph.ThermostatGraphView
-        android:id="@+id/graphView"
+    <surajit.com.graph.GraphViewThermostat
+        android:id="@+id/graphViewThermostat"
         android:layout_width="match_parent"
         android:layout_height="200dp"
         android:background="#FF78FF"/>
+
+    <surajit.com.graph.GraphViewLock
+        android:id="@+id/graphViewLock"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:layout_marginTop="10dp"
+        android:layout_below="@id/graphViewThermostat"
+        android:background="#4F78FF"/>
 
     <Button
         android:id="@+id/button"
