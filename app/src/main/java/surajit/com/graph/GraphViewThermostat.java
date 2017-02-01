@@ -25,7 +25,7 @@ public class GraphViewThermostat extends View {
     private List<GraphData> linePoints,barPoints;
     private int axisWidth;
     //private int axisPadding;
-    private int xAxisPadding,yAxisPadding;
+    private int paddingLeft, paddingBottom;
     private int width,graphWidth;
     private int height,graphHeight;
     private int textSize;
@@ -34,9 +34,7 @@ public class GraphViewThermostat extends View {
 
     public GraphViewThermostat(Context context, AttributeSet attrs) {
         super(context, attrs);
-        if(!isInEditMode()){
-            initView();
-        }
+        initView();
     }
 
     private void initView(){
@@ -46,20 +44,26 @@ public class GraphViewThermostat extends View {
         heatColor = Color.RED;
         coolColor = Color.BLUE;
         axisColor = Color.BLACK;
-        axisWidth = 10;
-        xAxisPadding = 120;
-        yAxisPadding = 150;
+
+        /*axisWidth = 10;
+        paddingLeft = 120;
+        paddingBottom = 150;*/
+
+        axisWidth = getDP(3);
+        paddingLeft = getDP(50);
+        paddingBottom = getDP(50);
 
         paint = new Paint();
         paint.setTextAlign(Paint.Align.CENTER);
         paint.setColor(Color.BLACK);
         paint.setStyle(Paint.Style.FILL);
+        paint.setAntiAlias(true);
 
-        linePaint = new Paint();
+        linePaint = new Paint(); //for bar graph
         linePaint.setTextAlign(Paint.Align.CENTER);
         linePaint.setColor(Color.BLACK);
         linePaint.setStyle(Paint.Style.STROKE);
-        linePaint.setStrokeWidth(4);
+        linePaint.setStrokeWidth(2);
         linePaint.setAntiAlias(true);
 
         textPaint = new Paint();
@@ -67,15 +71,15 @@ public class GraphViewThermostat extends View {
         textPaint.setTextAlign(Paint.Align.CENTER);
         textPaint.setColor(Color.BLACK);
         textPaint.setStyle(Paint.Style.FILL);
-        textPaint.setTextSize(30);
+        textPaint.setTextSize(getSP(10));
         textSize = (int)textPaint.getTextSize();
     }
 
     private void calculateSize(Canvas canvas){
         width = canvas.getWidth();
         height = canvas.getHeight();
-        graphWidth = width - xAxisPadding - 80;
-        graphHeight = height - yAxisPadding - 80;
+        graphWidth = width - paddingLeft - axisWidth - getDP(30);
+        graphHeight = height - paddingBottom - axisWidth - getDP(20);
     }
 
     @Override
@@ -83,7 +87,8 @@ public class GraphViewThermostat extends View {
         calculateSize(canvas);
         if (isInEditMode()) {
             canvas.drawColor(Color.rgb(200, 200, 200));
-            //canvas.drawText("GraphView: No Preview available", canvas.getWidth()/2, canvas.getHeight()/2, paint);
+            String text = "No Preview available";
+            canvas.drawText(text, textPaint.measureText(text), 50, textPaint);
         } else {
             drawGraphElements(canvas);
         }
@@ -111,9 +116,9 @@ public class GraphViewThermostat extends View {
 
     private void drawGraphElements(Canvas canvas){
         textPaint.setColor(axisColor);
-        String text = "Set Point:";textPaint.setStrokeWidth(2);
+        String text = "Set Point:";
         int textWidth = Math.round(textPaint.measureText(text));
-        canvas.drawText(text,textWidth/2,height-(yAxisPadding/3),textPaint);
+        canvas.drawText(text,textWidth/2,height-(paddingBottom /3)+textSize/2,textPaint);
         drawAxis(canvas);
         drawLineGraph(canvas);
         drawBarGraph(canvas);
@@ -148,7 +153,7 @@ public class GraphViewThermostat extends View {
             val1 = graphWidth;
         }
         x = (int)val1;
-        x+=xAxisPadding;
+        x+= paddingLeft;
         //x+=axisWidth;
         return x;
     }
@@ -163,7 +168,7 @@ public class GraphViewThermostat extends View {
             val1 = graphHeight;
         }
         y = (int) val1;
-        y+=yAxisPadding;
+        y+= paddingBottom;
         //y+=axisWidth;
         y = height - y;
         return y;
@@ -176,7 +181,7 @@ public class GraphViewThermostat extends View {
                 int left = getX(data.getMinX());
                 int top = getY(data.getY());
                 int right = getX(data.getMaxX());
-                int bottom = yAxisPadding + axisWidth;
+                int bottom = paddingBottom + axisWidth;
                 Rect rect = new Rect(left,top,right,height-bottom);
                 paint.setColor(color);
                 canvas.drawRect(rect, paint);
@@ -185,7 +190,7 @@ public class GraphViewThermostat extends View {
                 String text = ""+data.getY();
                 int circleWidth = Math.round(textPaint.measureText(text));
                 int cx = right - rect.width()/2;
-                int cy = height-yAxisPadding/3;
+                int cy = height- paddingBottom /3;
                 canvas.drawCircle(cx,cy,circleWidth,paint);
                 textPaint.setColor(Color.WHITE);
                 canvas.drawText(text,cx,cy+textSize/3,textPaint);
@@ -222,14 +227,14 @@ public class GraphViewThermostat extends View {
     private void drawXAxis(Canvas canvas){
         paint.setColor(axisColor);
         textPaint.setColor(axisColor);
-        Rect xAxis = getRect(xAxisPadding,height-axisWidth-yAxisPadding,width-xAxisPadding, axisWidth);
+        Rect xAxis = getRect(paddingLeft,height-axisWidth- paddingBottom,width- paddingLeft, axisWidth);
         canvas.drawRect(xAxis, paint);
         int lineHeight = axisWidth + 3; //marker line height
         int textPadding = lineHeight + textSize; // text of each marker ; text always draw as bottom up
         //draw markings
         float space = (float)graphWidth/12;
-        float x = xAxisPadding;
-        float y = height-yAxisPadding-lineHeight;
+        float x = paddingLeft;
+        float y = height- paddingBottom -lineHeight;
         for(int i=0;  i<=24; i+=2){
             Rect lineRect = getRect((int)x,(int)y,3,lineHeight);
             canvas.drawRect(lineRect, paint);
@@ -244,26 +249,27 @@ public class GraphViewThermostat extends View {
     private void drawYAxis(Canvas canvas){
         paint.setColor(axisColor);
         textPaint.setColor(axisColor);
-        Rect yAxis = getRect(xAxisPadding,0, axisWidth,height-yAxisPadding);
+        Rect yAxis = getRect(paddingLeft,0, axisWidth,height- paddingBottom);
         canvas.drawRect(yAxis, paint);
 
         int lineWidth = axisWidth + 3; //marker line height
+        int lineHeight = 3;
         //int textPadding = lineWidth + textSize; // text of each marker ; text always draw as bottom up
 
-        int textPadding = xAxisPadding - textSize;
+        int textPadding = paddingLeft - textSize;
         //draw markings
         float space = (float)graphHeight/10;
-        float x = xAxisPadding;
-        float y = height-yAxisPadding-axisWidth;
+        float x = paddingLeft;
+        float y = height- paddingBottom -axisWidth;
         for(int i=0;  i<=100; i+=10){
             if(i==0 || i==90 || i==100 ) {
                 y-=space;
                 continue;
             }
-            Rect lineRect = getRect((int)x,(int)y,lineWidth,3);
+            Rect lineRect = getRect((int)x,(int)y,lineWidth,lineHeight);
             canvas.drawRect(lineRect, paint);
 
-            canvas.drawText(""+i,textPadding,y,textPaint);
+            canvas.drawText(""+i,textPadding,y+textSize/2-lineHeight,textPaint);
 
             y-=space;
         }
@@ -274,6 +280,16 @@ public class GraphViewThermostat extends View {
     private Rect getRect(int x, int y, int width, int height){
         Rect rectangle = new Rect(x, y, x+width, y+height);
         return rectangle;
+    }
+
+    private int getDP(int dp){
+        float pixel = (float)dp*getResources().getDisplayMetrics().density;
+        return (int)pixel;
+    }
+
+    private int getSP(int sp){
+        float pixel = (float)sp*getResources().getDisplayMetrics().scaledDensity;
+        return (int)pixel;
     }
 
 }

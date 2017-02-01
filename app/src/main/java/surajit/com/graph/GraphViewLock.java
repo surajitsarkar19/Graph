@@ -6,11 +6,11 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.util.AttributeSet;
+import android.util.DisplayMetrics;
 import android.view.View;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.CancellationException;
 
 /**
  * Created by Surajit Sarkar on 31/1/17.
@@ -42,12 +42,23 @@ public class GraphViewLock extends View {
         initView();
     }
 
+    private int getDP(int dp){
+        float pixel = (float)dp*getResources().getDisplayMetrics().density;
+        return (int)pixel;
+    }
+
+    private int getSP(int sp){
+        float pixel = (float)sp*getResources().getDisplayMetrics().scaledDensity;
+        return (int)pixel;
+    }
+
     private void initView(){
-        axisWidth = 3;
-        paddingTop = 0;
-        paddingBottom = 150;
-        paddingLeft = 50;
-        paddingRight = 50;
+
+        axisWidth = getDP(3);
+        paddingTop = getDP(0);
+        paddingBottom = getDP(80);
+        paddingLeft = getDP(10);
+        paddingRight = getDP(10);
 
         points = new ArrayList<>();
         colorLock = Color.GREEN;
@@ -65,7 +76,7 @@ public class GraphViewLock extends View {
         textPaint.setTextAlign(Paint.Align.CENTER);
         textPaint.setColor(Color.BLACK);
         textPaint.setStyle(Paint.Style.FILL);
-        textPaint.setTextSize(30);
+        textPaint.setTextSize(getSP(12));
         textSize = (int)textPaint.getTextSize();
     }
 
@@ -79,7 +90,8 @@ public class GraphViewLock extends View {
         calculateSize(canvas);
         if (isInEditMode()) {
             canvas.drawColor(Color.rgb(200, 200, 200));
-            //canvas.drawText("GraphView: No Preview available", canvas.getWidth()/2, canvas.getHeight()/2, paint);
+            String text = "No Preview available";
+            canvas.drawText(text, textPaint.measureText(text), 50, textPaint);
         } else {
             drawGraphElements(canvas);
         }
@@ -131,6 +143,8 @@ public class GraphViewLock extends View {
         float x = paddingLeft;
         int lineHeight = axisWidth+6;
         float y = height - graphHeight/2 - paddingBottom - lineHeight;
+        int textPadding = getDP(5) + textSize;
+        int txtHeight = height - paddingBottom;
 
         for(int i=0; i<timeTop.length; i++){
             Rect lineRect = getRect((int)x,(int)y,3,lineHeight);
@@ -138,14 +152,29 @@ public class GraphViewLock extends View {
 
             String text1 = timeTop[i];
             String text2 = timeBottom[i];
-            int textPadding = 20 + textSize;
-
-            int txtHeight = height - paddingBottom;
             canvas.drawText(text1,x,txtHeight+textPadding,textPaint);
-            canvas.drawText(text2,x,txtHeight+textPadding + textPadding,textPaint);
+            canvas.drawText(text2,x,txtHeight+textPadding*2,textPaint);
 
             x+=space;
         }
+
+        String text4 = "Locked";
+        String text5 = "Unlocked";
+        float text4Width = textPaint.measureText(text4);
+        float text5Width = textPaint.measureText(text5);
+
+        float totalTextWidth = text4Width + text5Width  + textSize *2 + getDP(20);
+        float x1 = width/2 - totalTextWidth/2;
+        float y1 = txtHeight+textPadding*4;
+        paint.setColor(colorLock);
+        canvas.drawCircle(x1,y1,textSize/2,paint);
+        x1+=textSize;
+        canvas.drawText(text4,x1+text4Width/2,y1+textSize/3,textPaint);
+        paint.setColor(colorUnlock);
+        x1+=text4Width+getDP(20);
+        canvas.drawCircle(x1,y1,textSize/2,paint);
+        x1+=textSize;
+        canvas.drawText(text5,x1+text5Width/2,y1+textSize/3,textPaint);
     }
 
     private void calculateSize(Canvas canvas){
@@ -153,8 +182,8 @@ public class GraphViewLock extends View {
         height = canvas.getHeight();
         graphWidth = width - paddingLeft - paddingRight;
         graphHeight = height - paddingTop - paddingBottom;
-        barHeight = graphHeight/2 - 30;
-        barWidth = 20;
+        barHeight = graphHeight/2 - getDP(10);
+        barWidth = (graphWidth/12)/4;
     }
 
     private int getX(int val){
