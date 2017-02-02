@@ -25,7 +25,7 @@ public class GraphViewThermostat extends View {
     private List<GraphData> linePoints,barPoints;
     private int axisWidth;
     //private int axisPadding;
-    private int paddingLeft, paddingBottom;
+    private int paddingLeft, paddingBottom, paddingTop, paddingRight;
     private int width,graphWidth;
     private int height,graphHeight;
     private int textSize;
@@ -45,12 +45,10 @@ public class GraphViewThermostat extends View {
         coolColor = Color.BLUE;
         axisColor = Color.BLACK;
 
-        /*axisWidth = 10;
-        paddingLeft = 120;
-        paddingBottom = 150;*/
-
         axisWidth = getDP(3);
         paddingLeft = getDP(50);
+        paddingTop = getDP(10);
+        paddingRight = getDP(0);
         paddingBottom = getDP(50);
 
         paint = new Paint();
@@ -136,11 +134,6 @@ public class GraphViewThermostat extends View {
                 data = graphData;
             }
         }
-
-        /*GraphData data = new GraphData(120,60);
-        int x = getX(data.getX());
-        int y = getY(data.getY());
-        canvas.drawCircle(x,y,5,paint);*/
     }
 
     private int getX(int val){
@@ -197,18 +190,6 @@ public class GraphViewThermostat extends View {
             }
         }
 
-        /*GraphData data = new GraphData(120,240,60, GraphData.SetPoint.HEAT);
-        int color = getBarColor(data.getType());
-        int left = getX(data.getMinX());
-        int top = getY(data.getY());
-        int right = getX(data.getMaxX());
-        int bottom = axisPadding + axisWidth;
-        Rect rect = new Rect(left,top,right,height-bottom);
-        paint.setColor(color);
-        canvas.drawRect(rect, paint);*/
-
-        //Rect xAxis = getRect(123,250,197, 60);
-        //canvas.drawRect(xAxis, paint);
     }
 
     private int getBarColor(GraphData.SetPoint type){
@@ -262,10 +243,10 @@ public class GraphViewThermostat extends View {
         float x = paddingLeft;
         float y = height- paddingBottom -axisWidth;
         for(int i=0;  i<=100; i+=10){
-            if(i==0 || i==90 || i==100 ) {
+            /*if(i==0 || i==90 || i==100 ) {
                 y-=space;
                 continue;
-            }
+            }*/
             Rect lineRect = getRect((int)x,(int)y,lineWidth,lineHeight);
             canvas.drawRect(lineRect, paint);
 
