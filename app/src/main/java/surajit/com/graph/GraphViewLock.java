@@ -80,6 +80,12 @@ public class GraphViewLock extends View {
         textSize = (int)textPaint.getTextSize();
     }
 
+    /**
+     *
+     * @param minute 24 hour time in minutes
+     * @param status locked/unlocked
+     */
+
     public void addLock(int minute, String status){
         points.add(new LockData(minute,status));
         invalidate();
@@ -158,6 +164,12 @@ public class GraphViewLock extends View {
             x+=space;
         }
 
+        drawMarkings(canvas);
+    }
+
+    private void drawMarkings(Canvas canvas){
+        int textPadding = getDP(5) + textSize;
+        int txtHeight = height - paddingBottom;
         String text4 = "Locked";
         String text5 = "Unlocked";
         float text4Width = textPaint.measureText(text4);

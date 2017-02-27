@@ -10,23 +10,36 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="surajit.com.graph.MainActivity">
 
-    <surajit.com.graph.GraphViewThermostat
-        android:id="@+id/graphViewThermostat"
-        android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:background="#FF78FF"/>
 
-    <surajit.com.graph.GraphViewLock
-        android:id="@+id/graphViewLock"
+    <LinearLayout
+        android:id="@+id/linearLayoutThermostat"
         android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:layout_marginTop="10dp"
-        android:layout_below="@id/graphViewThermostat"
-        android:background="#4F78FF"/>
+        android:layout_height="250dp"
+        android:orientation="horizontal"/>
 
-    <Button
-        android:id="@+id/button"
+    <!--<ScrollView
+        android:id="@+id/scrollViewZoom"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"/>
+        android:layout_height="match_parent"
+        android:layout_above="@id/button">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+            <surajit.com.graph.GraphViewThermostat
+                android:id="@+id/graphViewThermostat"
+                android:layout_width="match_parent"
+                android:layout_height="250dp"
+                android:background="#FF78FF"/>
+
+            <surajit.com.graph.GraphViewLock
+                android:id="@+id/graphViewLock"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:layout_marginTop="10dp"
+                android:background="#4F78FF"/>
+
+        </LinearLayout>
+    </ScrollView>-->
+
 </RelativeLayout>
